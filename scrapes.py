@@ -54,7 +54,7 @@ listOfTiles2 = divMenuContainer2.select('li')
 
 idCounter = 0
 # headers for csv and json files
-headers = ['Id','Name','Status','Menu','Days','Hours','Description','Failed']
+headers = ['Id','Name','Status','Menu','Icon','Days','Hours','Description','Failed']
 
 with open('resturantInfo.csv', 'w') as csv_file:
     csv_writer = writer(csv_file)
@@ -64,6 +64,13 @@ with open('resturantInfo.csv', 'w') as csv_file:
         try:
             resturantTile = item.select('.card-block')
             resturantHash = item.find('a')['href']
+
+            # get the resturant icon image hash
+            cardHeader = item.select('.card-header')[0].attrs
+            resturantIcon = str(cardHeader).strip("{'class': ['card-header'], 'style': \"background-image:url('")
+            resturantIcon = resturantIcon[:-5]
+            resturantIcon = rootSite + resturantIcon
+
             resturantLink = rootSite + resturantHash
             listOfLinks.append(resturantLink)
 
@@ -154,7 +161,7 @@ with open('resturantInfo.csv', 'w') as csv_file:
             for item in timeOfDay:
                 times.append(item.get_text())
             idCounter = idCounter + 1
-            csv_writer.writerow([str(idCounter),pageTitle,status,menuLink,str(weekDays),str(times),description,""])
+            csv_writer.writerow([str(idCounter),pageTitle,status,menuLink,str(resturantIcon),str(weekDays),str(times),description,""])
             weekDays.clear()
             times.clear()
             javaScriptDays = {days: [] for days in range(7)}
@@ -169,6 +176,13 @@ with open('resturantInfo.csv', 'w') as csv_file:
         try:
             resturantTile = item.select('.card-block')
             resturantHash = item.find('a')['href']
+
+            # get the resturant icon image hash
+            cardHeader = item.select('.card-header')[0].attrs
+            resturantIcon = str(cardHeader).strip("{'class': ['card-header'], 'style': \"background-image:url('")
+            resturantIcon = resturantIcon[:-5]
+            resturantIcon = rootSite + resturantIcon
+
             resturantLink = rootSite + resturantHash
             listOfLinks.append(resturantLink)
 
@@ -259,13 +273,13 @@ with open('resturantInfo.csv', 'w') as csv_file:
             for item in timeOfDay:
                 times.append(item.get_text())
             idCounter = idCounter + 1
-            csv_writer.writerow([str(idCounter),pageTitle,status,menuLink,str(weekDays),str(times),description,""])
+            csv_writer.writerow([str(idCounter),pageTitle,status,menuLink,str(resturantIcon),str(weekDays),str(times),description,""])
             weekDays.clear()
             times.clear()
             javaScriptDays = {days: [] for days in range(7)}
         except:
             print("This site did not work: " + rootMarketplaceSite + resturantHash)
-            csv_writer.writerow(["","","","","","","",resturantLink])
+            #csv_writer.writerow(["","","","","","","",resturantLink])
             weekDays.clear()
             times.clear()
             javaScriptDays = {days: [] for days in range(7)}
