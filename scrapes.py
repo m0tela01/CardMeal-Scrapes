@@ -116,24 +116,28 @@ with open('resturantInfo.csv', 'w') as csv_file:
                 # might be useful later
                 javaScriptDays[int(weekDay)].append("("+UtcStartTime+")")
                 javaScriptDays[int(weekDay)].append("("+UtcEndTime+")")
-
-            testnCheck = javaScriptDays[int(currentWeekDay)][0]
-            status = 'Open'
-            # Special handling for The Ville Gril's odd hours format
-            if resturantHash == '/LocationsAndMenus/TheVilleGrill':
-                dayOfWeek = javaScriptDays[int(currentWeekDay)]
-                isOperating = False
-                # loop throught the data for that day
-                for value in dayOfWeek:
-                    # if its open currently at least one value is true
-                    if value == 'True':
-                        isOperating = True
-                        break
-                if isOperating == False:
-                    status = 'Closed'
-            else:   
-                if javaScriptDays[int(currentWeekDay)][0] == 'False' or javaScriptDays[int(currentWeekDay)][0] == '':
-                    status = 'Closed'
+            
+            if len(javaScriptDays[int(currentWeekDay)]) is 0:
+                status = 'Closed'
+            else:
+                testnCheck = javaScriptDays[int(currentWeekDay)][0]
+                status = 'Open'
+                
+                # Special handling for The Ville Gril's odd hours format
+                if resturantHash == '/LocationsAndMenus/TheVilleGrill':
+                    dayOfWeek = javaScriptDays[int(currentWeekDay)]
+                    isOperating = False
+                    # loop throught the data for that day
+                    for value in dayOfWeek:
+                        # if its open currently at least one value is true
+                        if value == 'True':
+                            isOperating = True
+                            break
+                    if isOperating == False:
+                        status = 'Closed'
+                else:   
+                    if javaScriptDays[int(currentWeekDay)][0] == 'False' or javaScriptDays[int(currentWeekDay)][0] == '':
+                        status = 'Closed'
             # finds out if the location is open or closed 
           
             # Menu
@@ -154,8 +158,8 @@ with open('resturantInfo.csv', 'w') as csv_file:
             description = str(description).replace("b'","")
             description = str(description).replace(u'\xa0',u'')
 
-            #Output
-            print(pageTitle) #confirm the resturant completed
+            # Output
+            print(pageTitle)    # print the name if the restuarant works
             for item in dayOfWeek:
                 weekDays.append(item.get_text())
             for item in timeOfDay:
@@ -229,23 +233,26 @@ with open('resturantInfo.csv', 'w') as csv_file:
                 javaScriptDays[int(weekDay)].append("("+UtcStartTime+")")
                 javaScriptDays[int(weekDay)].append("("+UtcEndTime+")")
 
-            testnCheck = javaScriptDays[int(currentWeekDay)][0]
-            status = 'Open'
-            # Special handling for The Ville Gril's odd hours format
-            if resturantHash == '/LocationsAndMenus/TheVilleGrill':
-                dayOfWeek = javaScriptDays[int(currentWeekDay)]
-                isOperating = False
-                # loop throught the data for that day
-                for value in dayOfWeek:
-                    # if its open currently at least one value is true
-                    if value == 'True':
-                        isOperating = True
-                        break
-                if isOperating == False:
+            if len(javaScriptDays[int(currentWeekDay)]) is 0:
                     status = 'Closed'
-            else:   
-                if javaScriptDays[int(currentWeekDay)][0] == 'False' or javaScriptDays[int(currentWeekDay)][0] == '':
-                    status = 'Closed'
+            else:
+                testnCheck = javaScriptDays[int(currentWeekDay)][0]
+                status = 'Open'
+                # Special handling for The Ville Gril's odd hours format
+                if resturantHash == '/LocationsAndMenus/TheVilleGrill':
+                    dayOfWeek = javaScriptDays[int(currentWeekDay)]
+                    isOperating = False
+                    # loop throught the data for that day
+                    for value in dayOfWeek:
+                        # if its open currently at least one value is true
+                        if value == 'True':
+                            isOperating = True
+                            break
+                    if isOperating == False:
+                        status = 'Closed'
+                else:   
+                    if javaScriptDays[int(currentWeekDay)][0] == 'False' or javaScriptDays[int(currentWeekDay)][0] == '':
+                        status = 'Closed'
             # finds out if the location is open or closed 
           
             # Menu
@@ -266,8 +273,8 @@ with open('resturantInfo.csv', 'w') as csv_file:
             description = str(description).replace("b'","")
             description = str(description).replace(u'\xa0',u'')
 
-            #Output
-            print(pageTitle)
+            # Output
+            print(pageTitle)    # print the name if the restuarant works
             for item in dayOfWeek:
                 weekDays.append(item.get_text())
             for item in timeOfDay:
