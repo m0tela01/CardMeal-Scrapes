@@ -24,6 +24,36 @@ currentWeekDay = currentWeekDay + 1
 if currentWeekDay == 7:
    currentWeekDay = 0
 
+latitudeAndLongitude = {
+    "The Ville Grill": "38.219138, -85.761756",
+    "Chick-fil-A": "38.217404, -85.756152",
+    "Einstein Bros. Bagels": "38.216506, -85.758678",
+    "McAlister’s Deli": "38.214153, -85.758902",
+    "Panda Express": "38.217740, -85.755384",
+    "Sandwich Shack": "38.217921, -85.755250",
+    "Papa John's": "38.213508, -85.755654",
+    "SRC Cafe": "38.217140, -85.756412",
+    "Subway at Davidson Hall": "38.218134, -85.758525",
+    "Twisted Taco": "38.218729, -85.762492",
+    "Wendy’s": "38.217649, -85.756103",
+    "Starbucks at Ekstrom Library": "38.216679, -85.760874",
+    "Starbucks at Health Sciences Center": "38.217405, -85.755014",
+    "Aqua Sushi by Drakes": "38.217921, -85.755250",
+    "Greens to Go": "38.217921, -85.755250",
+    "Olilo": "38.217921, -85.755250"
+}
+
+# cleans string before getting long/lat not needed for firebase - does this already
+def cleanString(stringToClean):
+    return re.sub('\u2019',"'", stringToClean)
+
+# gets the longitude and latitude if it is known
+def getLongitudeLatitude(resturantName):
+    lat, lon = "", ""
+    if resturantName in latitudeAndLongitude:
+        lat,lon = str(latitudeAndLongitude[resturantName]).split(',')
+    return lat, lon
+    
 # returns true if the current time is in the start/end times
 def checkIfClosed(startTime, endTime, currTime):
    if startTime <= endTime:
@@ -54,7 +84,7 @@ listOfTiles2 = divMenuContainer2.select('li')
 
 idCounter = 0
 # headers for csv and json files
-headers = ['Id','Name','Status','Menu','Icon','Days','Hours','Description','Failed']
+headers = ['Id','Name','Status','Menu','Latitude','Longitude','Icon','Days','Hours','Description','Failed']
 
 with open('resturantInfo.csv', 'w') as csv_file:
     csv_writer = writer(csv_file)
@@ -140,6 +170,11 @@ with open('resturantInfo.csv', 'w') as csv_file:
                         status = 'Closed'
             # finds out if the location is open or closed 
           
+            # gets the latitude and longitude of a resturant
+            latitude = ""
+            longitude = ""
+            latitude,longitude = getLongitudeLatitude(pageTitle)
+
             # Menu
             menuHash = divMenuContainer.find('a')['href']
 
@@ -165,7 +200,7 @@ with open('resturantInfo.csv', 'w') as csv_file:
             for item in timeOfDay:
                 times.append(item.get_text())
             idCounter = idCounter + 1
-            csv_writer.writerow([str(idCounter),pageTitle,status,menuLink,str(resturantIcon),str(weekDays),str(times),description,""])
+            csv_writer.writerow([str(idCounter),pageTitle,status,menuLink,str(latitude),str(longitude),str(resturantIcon),str(weekDays),str(times),description,""])
             weekDays.clear()
             times.clear()
             javaScriptDays = {days: [] for days in range(7)}
@@ -254,7 +289,12 @@ with open('resturantInfo.csv', 'w') as csv_file:
                     if javaScriptDays[int(currentWeekDay)][0] == 'False' or javaScriptDays[int(currentWeekDay)][0] == '':
                         status = 'Closed'
             # finds out if the location is open or closed 
-          
+                      
+            # gets the latitude and longitude of a resturant
+            latitude = ""
+            longitude = ""
+            latitude,longitude = getLongitudeLatitude(pageTitle)
+
             # Menu
             menuHash = divMenuContainer.find('a')['href']
 
@@ -280,7 +320,7 @@ with open('resturantInfo.csv', 'w') as csv_file:
             for item in timeOfDay:
                 times.append(item.get_text())
             idCounter = idCounter + 1
-            csv_writer.writerow([str(idCounter),pageTitle,status,menuLink,str(resturantIcon),str(weekDays),str(times),description,""])
+            csv_writer.writerow([str(idCounter),pageTitle,status,menuLink,str(latitude),str(longitude),str(resturantIcon),str(weekDays),str(times),description,""])
             weekDays.clear()
             times.clear()
             javaScriptDays = {days: [] for days in range(7)}
@@ -318,7 +358,7 @@ with open('resturantInfo.csv', 'r') as csvresturantInfo:
                     break
         jsonresturantInfo.write(']')
 
-print('\nUpdateing Firebase')
+print('\nUpdateing Firebase...')
 # post scrapes to firebase
 config = {
     'apiKey': 'AIzaSyCx9aSj07cOAtI-m7nBluMHXqEvTYyyXkc',
