@@ -38,6 +38,7 @@ latitudeAndLongitude = {
     "Wendy’s": "38.217649, -85.756103",
     "Starbucks at Ekstrom Library": "38.216679, -85.760874",
     "Starbucks at Health Sciences Center": "38.217405, -85.755014",
+    "Starbucks at SAC East" : "38.217406, -85.755025",
     "Aqua Sushi by Drakes": "38.217921, -85.755250",
     "Greens to Go": "38.217921, -85.755250",
     "Olilo": "38.217921, -85.755250"
